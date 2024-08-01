@@ -8,7 +8,7 @@ import plotly.graph_objects as go
 import plotly.io as pio
 import pandas as pd
 from scipy import interpolate
-import logging
+# import logging
 
 app = FastAPI()
 
@@ -127,7 +127,7 @@ async def handle_form(request: Request, dropdown: str = Form(...), moving_averag
     fig_json = pio.to_json(fig)
     
     # Log the JSON response
-    logging.info(f"Figure JSON: {fig_json}")
+    # logging.info(f"Figure JSON: {fig_json}")
     
     dropdown_options = [
         {"value": "ABB", "label": "ABB"},
