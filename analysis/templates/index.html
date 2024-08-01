@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plotly Chart</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        .navbar-custom {
+            background-color: #007bff;
+        }
+        .navbar-custom .navbar-brand,
+        .navbar-custom .nav-link {
+            color: white;
+        }
+        .chart-container {
+            width: 100%;
+            height: 70vh; /* Adjust the height of the chart */
+            border: 2px solid #000;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .form-container {
+            margin-left: -50px; /* Adjust the form's margin to move it to the left */
+        }
+        .tile {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <a class="navbar-brand" href="#">Financial Assistant</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Features</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Pricing</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">About</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container mt-5">
+        <h1 class="text-left">Intelligent Financial Assistant</h1>
+        <div class="row">
+            <div class="col-md-3 form-container">
+                <div class="card tile">
+                    <div class="card-body" >
+                        <h5 class="card-title">Choose the ticker:</h5>
+                        <form id="ticker-form" action="/submit" method="post">
+                            <div class="form-group">
+                                <label for="dropdown">Options:</label>
+                                <select name="dropdown" id="dropdown" class="form-control">
+                                    {% for option in dropdown_options %}
+                                    <option value="{{ option.value }}" {% if option.value == selected_option %}selected{% endif %}>{{ option.label }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="moving_average_1">Moving Average option 1:</label>
+                                <select name="moving_average_1" id="moving_average_1" class="form-control">
+                                    {% for option in moving_average_options %}
+                                    <option value="{{ option.value }}" {% if option.value == selected_moving_average_1 %}selected{% endif %}>{{ option.label }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="moving_average_2">Moving Average option 2:</label>
+                                <select name="moving_average_2" id="moving_average_2" class="form-control">
+                                    {% for option in moving_average_options %}
+                                    <option value="{{ option.value }}" {% if option.value == selected_moving_average_2 %}selected{% endif %}>{{ option.label }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="card tile" style="width: 150%;">
+                    <div class="card-body">
+                        <h5 class="card-title">{{selected_option}}</h5>
+                        <div class="chart-container" id="chart-container">
+                            <!-- Plotly chart will be injected here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            {% if fig_json %}
+                var figJson = {{ fig_json|safe }};
+                Plotly.newPlot('chart-container', figJson.data, figJson.layout);
+            {% endif %}
+        });
+    </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
