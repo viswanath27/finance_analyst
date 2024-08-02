@@ -165,4 +165,5 @@ async def handle_form(request: Request, dropdown: str = Form(...), moving_averag
 
 if __name__ == "__main__":
     import uvicorn
+    print("App started")
     uvicorn.run(app, host="0.0.0.0",  port=8000)
